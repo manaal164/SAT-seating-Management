@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+app.use("/api/students", studentRoutes);
+app.use("/api/seats", seatRoutes);
+
 
 // Database connection
 const db = require("./db");

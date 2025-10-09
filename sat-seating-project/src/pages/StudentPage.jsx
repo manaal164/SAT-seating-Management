@@ -1,120 +1,192 @@
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function StudentPage() {
   const [rollNo, setRollNo] = useState("");
-  const [fullName, setFullName] = useState("");   // ✅ Added full name
+  const [fullName, setFullName] = useState("");
   const [selectedSeat, setSelectedSeat] = useState("");
   const [availableSeats, setAvailableSeats] = useState([]);
   const [message, setMessage] = useState("");
+  const [isBooked, setIsBooked] = useState(false);
 
-  // Load available seats from backend
+  // ✅ Fetch all available seats
+  const fetchSeats = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/seats/available");
+      setAvailableSeats(res.data);
+    } catch (err) {
+      console.error("Error fetching seats:", err);
+      setMessage("⚠️ Error loading seats from server");
+    }
+  };
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/seats/available")
-      .then((res) => {
-        console.log("Available seats from backend:", res.data);
-        setAvailableSeats(res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching seats:", err);
-      });
+    fetchSeats();
   }, []);
 
-  // Handle student registration
-  const handleSubmit = async (e) => {
+  // ✅ Book a seat
+  const handleBook = async (e) => {
     e.preventDefault();
+    setMessage("");
+
     if (!rollNo || !fullName || !selectedSeat) {
-      setMessage("⚠️ Please enter roll no, full name and select a seat");
+      setMessage("⚠️ Please enter Roll No, Full Name, and select a Seat");
       return;
     }
 
     try {
-      await axios.post("http://localhost:5000/api/students", {
+      const payload = {
         roll_number: rollNo,
-        full_name: fullName,         // ✅ send full name also
+        full_name: fullName,
         seat_number: selectedSeat,
-      });
+      };
 
-      setMessage("✅ Student registered successfully!");
-      setRollNo("");
-      setFullName("");              // ✅ reset full name
-      setSelectedSeat("");
+      const res = await axios.post("http://localhost:5000/api/students", payload);
+      console.log("Booking response:", res.data);
 
-      // refresh available seats after booking
-      const updated = await axios.get("http://localhost:5000/api/seats/available");
-      setAvailableSeats(updated.data);
-
+      setMessage("✅ Seat booked successfully!");
+      setIsBooked(true);
+      await fetchSeats();
     } catch (err) {
-      console.error("❌ Error registering student:", err.response?.data || err.message);
-      setMessage("❌ Error registering student");
+      console.error("Booking error:", err.response?.data || err.message);
+      setMessage(err.response?.data?.error || "❌ Booking failed");
     }
   };
 
+  // ✅ Withdraw seat
+  const handleWithdraw = async () => {
+    setMessage("");
+
+    if (!rollNo || !selectedSeat) {
+      setMessage("⚠️ Enter Roll No and Seat Number to withdraw");
+      return;
+    }
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/students/withdraw", {
+        roll_number: rollNo,
+        seat_number: selectedSeat,
+      });
+      console.log("Withdraw response:", res.data);
+
+      setMessage("🪑 Seat withdrawn successfully!");
+      setIsBooked(false);
+      setSelectedSeat("");
+      setFullName("");
+      await fetchSeats();
+    } catch (err) {
+      console.error("Withdraw error:", err.response?.data || err.message);
+      setMessage(err.response?.data?.error || "❌ Withdraw failed");
+    }
+  };
+
+  // ✅ Check if student already booked a seat
+  const checkExistingBooking = async (roll) => {
+    if (!roll) return;
+    try {
+      const res = await axios.get(`http://localhost:5000/api/students/${roll}`);
+      if (res.data && res.data.seat_number) {
+        setIsBooked(true);
+        setSelectedSeat(res.data.seat_number);
+        setFullName(res.data.full_name || "");
+        setMessage(`ℹ️ You already booked Seat ${res.data.seat_number}`);
+      } else {
+        setIsBooked(false);
+        setSelectedSeat("");
+        setFullName("");
+      }
+    } catch (err) {
+      setIsBooked(false);
+      setSelectedSeat("");
+      setFullName("");
+    }
+  };
+
+  useEffect(() => {
+    checkExistingBooking(rollNo);
+  }, [rollNo]);
+
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Student Registration</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Roll No input */}
-        <div>
-          <label className="block font-medium">Roll No</label>
-          <input
-            type="text"
-            value={rollNo}
-            onChange={(e) => setRollNo(e.target.value)}
-            className="border p-2 w-full rounded"
-            placeholder="Enter roll number"
-          />
-        </div>
+    <div className="p-6 min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4 text-center">
+          🎓 Student Seat Booking Portal
+        </h2>
 
-        {/* Full Name input */}
-        <div>
-          <label className="block font-medium">Full Name</label>
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="border p-2 w-full rounded"
-            placeholder="Enter full name"
-          />
-        </div>
+        {/* Form */}
+        <form onSubmit={handleBook} className="space-y-4">
+          {/* Roll No */}
+          <div>
+            <label className="block font-medium">Roll No</label>
+            <input
+              type="text"
+              value={rollNo}
+              onChange={(e) => setRollNo(e.target.value)}
+              className="border p-2 w-full rounded"
+              placeholder="Enter Roll Number"
+              disabled={isBooked}
+            />
+          </div>
 
-        {/* Seat Dropdown */}
-        <div>
-          <label className="block font-medium">Select Seat</label>
-          <select
-            value={selectedSeat}
-            onChange={(e) => setSelectedSeat(e.target.value)}
-            className="border p-2 w-full rounded"
-          >
-            <option value="">-- Select a seat --</option>
-            {availableSeats.length > 0 ? (
-              availableSeats.map((seat, idx) => (
-                <option key={idx} value={seat.seat_number}>
-                  {seat.seat_number}
-                </option>
-              ))
+          {/* Full Name */}
+          <div>
+            <label className="block font-medium">Full Name</label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="border p-2 w-full rounded"
+              placeholder="Enter Full Name"
+              disabled={isBooked}
+            />
+          </div>
+
+          {/* Seat Selection */}
+          <div>
+            <label className="block font-medium">Select Seat</label>
+            <select
+              value={selectedSeat}
+              onChange={(e) => setSelectedSeat(e.target.value)}
+              className="border p-2 w-full rounded"
+              disabled={isBooked}
+            >
+              <option value="">-- Select a Seat --</option>
+              {availableSeats.length > 0 ? (
+                availableSeats.map((seat) => (
+                  <option key={seat.id} value={seat.seat_number}>
+                    {seat.seat_number}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No seats available</option>
+              )}
+            </select>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-center gap-3 mt-4">
+            {!isBooked ? (
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Register & Book
+              </button>
             ) : (
-              <option disabled>No seats available</option>
+              <button
+                type="button"
+                onClick={handleWithdraw}
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Withdraw Seat
+              </button>
             )}
-          </select>
-        </div>
+          </div>
+        </form>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Register
-        </button>
-      </form>
-
-      {message && <p className="mt-4">{message}</p>}
+        {/* Message */}
+        {message && <p className="mt-4 text-center">{message}</p>}
+      </div>
     </div>
   );
 }
