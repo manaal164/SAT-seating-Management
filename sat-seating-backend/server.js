@@ -2,33 +2,33 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-app.use("/api/students", studentRoutes);
-app.use("/api/seats", seatRoutes);
 
+// ✅ Initialize express app FIRST
+const app = express();
 
-// Database connection
+// ✅ Middleware
+app.use(cors());
+app.use(bodyParser.json());
+
+// ✅ Database connection
 const db = require("./db");
 
-// Import Routes
+// ✅ Import Routes
 const seatRoutes = require("./routes/seats");
 const studentRoutes = require("./routes/students");
 const bookingRoutes = require("./routes/bookings");
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-
-// ================== Routes ================== //
+// ✅ Use Routes
 app.use("/api/seats", seatRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/bookings", bookingRoutes);
 
-// Health check
+// ✅ Health check route
 app.get("/", (req, res) => {
   res.send("✅ Backend is running...");
 });
 
-// ================== Server ================== //
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
