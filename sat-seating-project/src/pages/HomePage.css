@@ -1,56 +1,87 @@
 .homepage {
   text-align: center;
-  background: linear-gradient(to right, #3a7bd5, #3a6073);
-  min-height: 100vh;
+  background: linear-gradient(135deg, #244c74, #152b44);
+  min-height: calc(100vh - 80px); /* adjusts according to navbar & footer */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: #f1f1f1;
+  font-family: "Poppins", sans-serif;
+  padding: 60px 20px;
+  box-sizing: border-box;
 }
 
 .title {
-  font-size: 2.5rem;
-  margin-bottom: 40px;
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 50px;
+  color: #ffcc00;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .button-container {
   display: flex;
-  gap: 20px;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .btn {
-  padding: 15px 30px;
-  font-size: 1.2rem;
+  padding: 14px 36px;
+  font-size: 1.05rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Student Button */
 .student-btn {
-  background-color: #4caf50;
-  color: white;
+  background-color: #3ccf4e;
+  color: #fff;
 }
 
 .student-btn:hover {
-  background-color: #45a049;
+  background-color: #36b346;
+  transform: translateY(-3px);
 }
 
+/* Admin Button */
 .admin-btn {
-  background-color: #2196f3;
-  color: white;
+  background-color: #2874f0;
+  color: #fff;
 }
 
 .admin-btn:hover {
-  background-color: #1976d2;
+  background-color: #1e5dc9;
+  transform: translateY(-3px);
 }
 
+/* Optional third button (if you add login or other action) */
 .login-btn {
   background-color: #f39c12;
-  color: white;
+  color: #fff;
 }
 
 .login-btn:hover {
   background-color: #e67e22;
+  transform: translateY(-3px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 250px;
+  }
 }

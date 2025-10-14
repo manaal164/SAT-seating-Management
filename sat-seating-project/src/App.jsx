@@ -4,18 +4,26 @@ import HomePage from "./pages/HomePage";
 import StudentPage from "./pages/StudentPage";
 import AdminPage from "./pages/AdminPage";
 import AdminLogin from "./pages/AdminLogin";
-import BookingReceipt from "./pages/BookingReceipt"; // ✅ Added
+import BookingReceipt from "./pages/BookingReceipt";
+import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/student" element={<StudentPage />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/receipt" element={<BookingReceipt />} /> {/* ✅ Added */}
-      </Routes>
+      <div id="app" style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <Navbar />
+        <main style={{ flex: "1" }}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/student" element={<StudentPage />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/receipt" element={<BookingReceipt />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </Router>
   );
 }

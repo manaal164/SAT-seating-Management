@@ -12,7 +12,7 @@ function StudentPage() {
   const [isBooked, setIsBooked] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Fetch all seats
+  // Fetch seats
   useEffect(() => {
     const fetchSeats = async () => {
       try {
@@ -30,7 +30,7 @@ function StudentPage() {
     fetchSeats();
   }, []);
 
-  // ✅ Check if student already booked
+  // Check existing booking
   useEffect(() => {
     if (!rollNo) return;
     const checkExistingBooking = async () => {
@@ -46,7 +46,7 @@ function StudentPage() {
           setSelectedSeat("");
           setFullName("");
         }
-      } catch (err) {
+      } catch {
         setIsBooked(false);
         setSelectedSeat("");
         setFullName("");
@@ -55,7 +55,7 @@ function StudentPage() {
     checkExistingBooking();
   }, [rollNo]);
 
-  // ✅ Book a seat
+  // Book a seat
   const handleBook = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -66,7 +66,7 @@ function StudentPage() {
 
     try {
       const payload = { roll_number: rollNo, full_name: fullName, seat_number: selectedSeat };
-      const res = await axios.post("http://localhost:5000/api/students", payload);
+      await axios.post("http://localhost:5000/api/students", payload);
       setIsBooked(true);
       setMessage("✅ Seat booked successfully!");
       navigate("/receipt", {
@@ -85,7 +85,7 @@ function StudentPage() {
     }
   };
 
-  // ✅ Withdraw seat
+  // Withdraw seat
   const handleWithdraw = async () => {
     setMessage("");
     if (!rollNo || !selectedSeat) {
@@ -114,7 +114,7 @@ function StudentPage() {
     }
   };
 
-  // ✅ Render hall-like seat map
+  // Render seat map
   const renderSeatMap = () => {
     if (!seats || seats.length === 0) return <p>Loading seat map...</p>;
     const rows = {};
@@ -133,7 +133,9 @@ function StudentPage() {
               <span className="w-3 text-[10px] font-bold text-gray-600 shrink-0 mt-1">{row}</span>
               <div className="w-full">
                 {rows[row]
-                  .sort((a, b) => parseInt(a.seat_number.slice(1)) - parseInt(b.seat_number.slice(1)))
+                  .sort(
+                    (a, b) => parseInt(a.seat_number.slice(1)) - parseInt(b.seat_number.slice(1))
+                  )
                   .map((seat) => (
                     <button
                       key={seat.id}
@@ -142,6 +144,13 @@ function StudentPage() {
                         !seat.is_booked && !isBooked && setSelectedSeat(seat.seat_number)
                       }
                       disabled={seat.is_booked || isBooked}
+                      className={`text-white font-medium rounded-sm border transition-all duration-150 ${
+                        seat.seat_number === selectedSeat
+                          ? "bg-yellow-400 border-yellow-600 shadow-sm"
+                          : seat.is_booked
+                          ? "bg-red-500 border-red-700 opacity-70 cursor-not-allowed"
+                          : "bg-green-500 border-green-700 hover:bg-green-400"
+                      }`}
                       style={{
                         width: "20px",
                         height: "20px",
@@ -153,13 +162,6 @@ function StudentPage() {
                         lineHeight: "20px",
                         padding: 0,
                       }}
-                      className={`text-white font-medium rounded-sm border-1 transition-all duration-150 ${
-                        seat.seat_number === selectedSeat
-                          ? "bg-yellow-400 border-yellow-600 shadow-sm"
-                          : seat.is_booked
-                          ? "bg-red-500 border-red-700 opacity-70 cursor-not-allowed"
-                          : "bg-green-500 border-green-700 hover:bg-green-400"
-                      }`}
                       title={seat.seat_number}
                     >
                       {seat.seat_number.slice(1)}
@@ -174,9 +176,11 @@ function StudentPage() {
 
   return (
     <>
-      <Navbar /> {/* ✅ Navbar added here */}
-      <div className="p-4 min-h-screen bg-gray-100 flex flex-col items-center">
-        <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-3xl mt-6">
+      <Navbar />
+
+      {/* ✅ Added padding equal to navbar height (prevents overlap) */}
+      <div style={{ paddingTop: "var(--nav-height)" }} className="p-4 min-h-screen bg-gray-100 flex flex-col items-center">
+        <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-3xl mt-2">
           <h2 className="text-xl font-bold mb-4 text-center">🎓 Student Seat Booking Portal</h2>
 
           <form onSubmit={handleBook} className="space-y-4">
@@ -228,7 +232,8 @@ function StudentPage() {
                 </div>
 
                 <p className="mt-2 text-sm font-semibold">
-                  Current Selection: <span className="text-blue-600">{selectedSeat || "None"}</span>
+                  Current Selection:{" "}
+                  <span className="text-blue-600">{selectedSeat || "None"}</span>
                 </p>
               </div>
             </div>

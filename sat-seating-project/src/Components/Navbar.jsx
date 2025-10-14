@@ -5,9 +5,13 @@ import "./Navbar.css";
 function Navbar() {
   return (
     <nav className="navbar">
-      <div className="navbar-logo">
-        🎓 SAT Enrolling Portal
+      <div className="navbar-left">
+        <Link to="/" className="back-home-btn" title="Back to Home">
+          ⬅
+        </Link>
+        <div className="navbar-logo">🎓 SAT Enrolling Portal</div>
       </div>
+
       <ul className="navbar-links">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/about">About</Link></li>

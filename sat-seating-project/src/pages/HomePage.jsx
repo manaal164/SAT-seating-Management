@@ -8,7 +8,7 @@ function Homepage() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="homepage">
       <Navbar />
       <div className="container">
         <h1>Welcome to SAT Enrolling Portal</h1>
@@ -19,6 +19,7 @@ function Homepage() {
           Admin Portal
         </button>
       </div>
+     
     </div>
   );
 }
