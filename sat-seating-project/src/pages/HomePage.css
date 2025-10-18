@@ -1,15 +1,42 @@
 .homepage {
-  text-align: center;
-  background: linear-gradient(135deg, #244c74, #152b44);
-  min-height: calc(100vh - 80px); /* adjusts according to navbar & footer */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #f1f1f1;
-  font-family: "Poppins", sans-serif;
-  padding: 60px 20px;
-  box-sizing: border-box;
+    text-align: center;
+    background: linear-gradient(135deg, #244c74, #152b44); 
+    
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #f1f1f1;
+    font-family: "Poppins", sans-serif;
+    
+    /* REMOVE the previous padding to prevent unwanted dark blue space: */
+    /* padding: 60px 20px; */ 
+    
+    /* Add border-radius to match the inner white box */
+    border-radius: 12px; 
+    
+    box-sizing: border-box;
+    /* Optional: Add a shadow to the outer box as well */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); 
+}
+
+.homepage .container {
+    background-color: #fff;
+    
+    /* Use margin to create the dark blue border/frame space */
+    margin: 15px; /* Adjust this value (e.g., 10px, 20px) to control the dark blue border width */
+    
+    /* Add padding inside the white box for content spacing */
+    padding: 40px; 
+    
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .title {
@@ -84,4 +111,28 @@
     width: 100%;
     max-width: 250px;
   }
+}
+
+html, body {
+    height: 100%; /* Ensure both take up the full viewport height */
+    margin: 0;    /* Remove default body margins */
+    padding: 0;   /* Remove default body padding */
+    box-sizing: border-box; /* Good practice for sizing */
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+
+    /* --- ADD THESE LINES FOR THE BACKGROUND IMAGE --- */
+    background-image: url('../assets/bg1.jpg'); /* Adjust path and extension as needed */
+    background-size: 100%; /* Ensures the image covers the entire viewport */
+    background-repeat:repeat-y;
+    background-attachment: fixed; /* Keeps the background static during scrolling (optional) */
+    /* ------------------------------------------------ */
 }

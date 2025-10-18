@@ -1,5 +1,5 @@
 .footer {
-  width: 100%;
+  width: 100vw; /* Use viewport width to ensure full screen coverage */
   background-color: #0b1e39;
   color: #e0e0e0;
   font-family: "Poppins", sans-serif;
@@ -7,15 +7,17 @@
   line-height: 1.4;
   padding: 10px 0 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: auto; /* ✅ pushes footer to bottom when content is short */
+  margin-top: auto;
+  position: relative; /* Maintain positioning context */
+  margin-left: calc(-50vw + 50%); /* Offset to counteract parent constraints */
+  margin-right: calc(-50vw + 50%); /* Ensure full viewport width */
 }
 
 .footer-container {
   width: 90%;
-  max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 16px;
@@ -24,7 +26,6 @@
 .footer-left,
 .footer-links,
 .footer-right {
-  flex: 1;
   min-width: 160px;
 }
 
@@ -83,4 +84,8 @@
   padding-top: 4px;
   font-size: 0.65rem;
   color: #999;
+}
+
+body {
+  overflow-x: hidden;
 }

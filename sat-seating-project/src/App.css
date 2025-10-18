@@ -10,11 +10,16 @@ body,
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    
+    /* REPLACE THE OLD GRADIENT with your new image background: */
+    background-image: url('./assets/bg1.jpg'); /* Adjust path as needed */
+    background-size: 100%;; 
+    background-repeat: repeat-y;
+    background-attachment: fixed;
 }
 
 /* App main area */
