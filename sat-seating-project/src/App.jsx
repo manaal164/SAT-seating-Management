@@ -7,6 +7,9 @@ import AdminLogin from "./pages/AdminLogin";
 import BookingReceipt from "./pages/BookingReceipt";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
+import About from "./pages/AboutUs";
+import Contact from "./pages/ContactUs";
+
 
 function App() {
   return (
@@ -20,6 +23,8 @@ function App() {
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/receipt" element={<BookingReceipt />} />
+            <Route path="/about" element={<About />} />       {/* Add About */}
+            <Route path="/contact" element={<Contact />} />   {/* Add Contact */}
           </Routes>
         </main>
         <Footer />

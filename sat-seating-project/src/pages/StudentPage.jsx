@@ -114,87 +114,167 @@ function StudentPage() {
     }
   };
 
-  // Render seat list (simple scroll selector)
-  const renderSeatList = () => (
-    <select
-      className="border p-2 rounded w-full bg-white"
-      value={selectedSeat}
-      onChange={(e) => setSelectedSeat(e.target.value)}
-      disabled={isBooked}
-    >
-      <option value="">Select a Seat</option>
-      {seats
-        .filter((seat) => !seat.is_booked || seat.seat_number === selectedSeat)
-        .map((seat) => (
-          <option key={seat.id} value={seat.seat_number}>
-            {seat.seat_number}
-          </option>
-        ))}
-    </select>
-  );
+  // Inline CSS (AdminPage style inspired)
+  const styles = {
+    pageWrapper: {
+      Height: "90vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      background: "transparent",
+      paddingTop: "var(--nav-height, 70px)",
+      paddingBottom: "20px",
+    },
+    box: {
+      background: "white",
+      width: "95%",
+      maxWidth: "600px",
+      padding: "30px",
+      borderRadius: "20px",
+      boxShadow: "0px 10px 25px rgba(0,0,0,0.15)",
+      display: "flex",
+      flexDirection: "column",
+      gap: "20px",
+      overflowY: "auto",
+      maxHeight: "80vh",
+      marginBottom: "-20px",
+    },
+    title: {
+      fontSize: "26px",
+      fontWeight: "700",
+      textAlign: "center",
+      color: "#1a1a1a",
+    },
+    label: {
+      fontWeight: "600",
+      marginBottom: "6px",
+      color: "#1a1a1a",
+    },
+    input: {
+      width: "95%",
+      padding: "10px",
+      borderRadius: "10px",
+      border: "1px solid #c9c9c9",
+      fontSize: "15px",
+      outline: "none",
+      backgroundColor: "#1a1a1a",
+    },
+    select: {
+      width: "100%",
+      padding: "10px",
+      borderRadius: "10px",
+      border: "1px solid #c9c9c9",
+      fontSize: "15px",
+      outline: "none",
+      background: "white",
+      color: "#c9c9c9",
+      transition: "all 0.9s ease-in-out",
+      backgroundColor: "#1a1a1a",
+      
+    },
+    button: {
+      padding: "12px 20px",
+      fontWeight: "600",
+      borderRadius: "10px",
+      cursor: "pointer",
+      transition: "0.3s",
+    },
+    bookBtn: {
+      background: "#1a73e8",
+      color: "white",
+    },
+    withdrawBtn: {
+      background: "#e63946",
+      color: "white",
+    },
+    message: {
+      textAlign: "center",
+      fontWeight: "600",
+      fontSize: "15px",
+      color: "#1a1a1a",
+    },
+  };
 
   return (
     <>
       <Navbar />
-      <div style={{ paddingTop: "var(--nav-height)" }} className="p-6 min-h-screen bg-gray-100 flex flex-col items-center">
-        <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-lg mt-6">
-          <h2 className="text-2xl font-bold mb-6 text-center !text-black
-">
-            🎓 Student Seat Booking Portal
-          </h2>
+      <div style={styles.pageWrapper}>
+        <div style={styles.box}>
+          <h2 style={styles.title}>🎓 Student Seat Booking Portal</h2>
 
-          <form onSubmit={handleBook} className="space-y-5">
+          <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
             <div>
-              <label className="block text-black font-bold mb-1">Roll No</label>
+              <label style={styles.label}>Roll No</label>
               <input
                 type="text"
                 value={rollNo}
                 onChange={(e) => setRollNo(e.target.value)}
-                className="border p-2 w-full rounded"
-                placeholder="Enter Roll Number"
+                style={styles.input}
                 disabled={isBooked}
               />
             </div>
 
             <div>
-              <label className="block text-black font-bold mb-1">Full Name</label>
+              <label style={styles.label}>Full Name</label>
               <input
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="border p-2 w-full rounded"
-                placeholder="Enter Full Name"
+                style={styles.input}
                 disabled={isBooked}
               />
             </div>
 
             <div>
-              <label className="block text-black font-bold mb-1">Select Seat</label>
-              {renderSeatList()}
+              <label style={styles.label}>Select Seat</label>
+              <select
+                style={styles.select}
+                value={selectedSeat}
+                onChange={(e) => setSelectedSeat(e.target.value)}
+                disabled={isBooked}
+              >
+                <option value="" disabled>
+                  Select Seat
+                </option>
+                {seats
+                  .filter((seat) => !seat.is_booked || seat.seat_number === selectedSeat)
+                  .map((seat) => (
+                    <option key={seat.id} value={seat.seat_number}>
+                      {seat.seat_number}
+                    </option>
+                  ))}
+              </select>
             </div>
 
-            <div className="flex justify-center gap-3 mt-4">
+            <div style={{ display: "flex", justifyContent: "center", gap: "15px", marginTop: "10px" }}>
               {!isBooked ? (
                 <button
-                  type="submit"
-                  className="bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 transition duration-150 disabled:opacity-50"
-                  disabled={!selectedSeat || !rollNo || !fullName}
+                  type="button"
+                  style={{ ...styles.button, ...styles.bookBtn }}
+                  onClick={handleBook}
+                  disabled={!rollNo || !fullName || !selectedSeat}
+                  onMouseOver={(e) => (e.currentTarget.style.background = "#155ab6")}
+                  onMouseOut={(e) => (e.currentTarget.style.background = "#1a73e8")}
+
                 >
                   Register & Book Seat
                 </button>
               ) : (
                 <button
                   type="button"
+                  style={{ ...styles.button, ...styles.withdrawBtn }}
                   onClick={handleWithdraw}
-                  className="bg-red-500 text-white px-5 py-2 rounded hover:bg-red-600 transition duration-150"
+                  onMouseOver={(e) => (e.currentTarget.style.background = "#c9182b")}
+                  onMouseOut={(e) => (e.currentTarget.style.background = "#e63946")}
+
                 >
                   Withdraw Seat
                 </button>
               )}
             </div>
-          </form>
 
-          {message && <p className="mt-5 text-center text-sm">{message}</p>}
+            {message && <p style={styles.message}>{message}</p>}
+          </div>
         </div>
       </div>
     </>

@@ -1,12 +1,12 @@
 :root {
   /* ultra-thin navbar height */
-  --nav-height: 34px;
+  --nav-height: 50px;
 }
 
 /* navbar container */
 .navbar {
   width: 100%;
-  background-color: #003366; /* deep blue */
+  background-color: #0d4276; 
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -30,11 +30,11 @@
 
 /* logo */
 .navbar-logo {
-  font-size: 0.9rem;
+  font-size: 20px;
   font-weight: 600;
   white-space: nowrap;
   color: #ffdd57; /* gold accent */
-  letter-spacing: 0.3px;
+  letter-spacing: 0.7px;
 }
 
 /* navbar links */
@@ -43,7 +43,7 @@
   display: flex;
   gap: 18px;
   margin: 0;
-  padding: 0;
+  padding: 500;
   align-items: center;
   flex: 1;
   justify-content: flex-start;

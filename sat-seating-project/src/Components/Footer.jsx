@@ -1,24 +1,26 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
+
         <div className="footer-left">
           <h2 className="footer-logo">SAT Enrolling Portal</h2>
           <p className="footer-text">
-            Empowering students to achieve excellence through digital enrollment.
+            Empowering students towards digital excellence.
           </p>
         </div>
 
         <div className="footer-links">
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/student">Student Portal</a></li>
-            <li><a href="/admin-login">Admin Login</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/student">Student Portal</Link></li>
+            <li><Link to="/admin-login">Admin Login</Link></li>
+            <li><Link to="/contact">Contact</Link></li>
           </ul>
         </div>
 
@@ -27,10 +29,11 @@ function Footer() {
           <p>Email: support@satportal.com</p>
           <p>Phone: +92 300 1234567</p>
         </div>
+
       </div>
 
       <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} SAT Enrolling Portal | All Rights Reserved</p>
+        © {new Date().getFullYear()} SAT Enrolling Portal — All Rights Reserved
       </div>
     </footer>
   );
